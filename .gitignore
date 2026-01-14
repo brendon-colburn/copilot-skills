@@ -1,0 +1,21 @@
+# Local configuration files
+config.json
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.csv
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local engagement folders (if testing locally)
+Engagements/

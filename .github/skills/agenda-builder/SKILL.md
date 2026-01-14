@@ -1,0 +1,240 @@
+---
+name: agenda-builder
+description: Creates engagement agendas from planning transcripts or notes. Extracts structured agenda data into JSON format, then renders DOCX using templates. Use when building agendas, processing planning calls, or when user mentions transcripts, Discovery, Architecture Review, POC, Executive Briefing, Deep Dive sessions, or agenda generation.
+---
+
+# Agenda Builder
+
+**Architecture**: Claude analyzes transcript → Creates JSON → Python renders DOCX
+
+Claude does the intelligent extraction. Python just renders the template.
+
+## Workflow
+
+```
+AI Agenda Building Process:
+- [ ] Analyze planning transcript/notes
+- [ ] Extract structured data following AGENT_INSTRUCTIONS.MD
+- [ ] Create JSON with customer, date, title, summary, agenda_items
+- [ ] Show preview to user for confirmation
+- [ ] Get user approval/corrections
+- [ ] Save JSON to engagement folder
+- [ ] Call scripts/core.py to render DOCX
+- [ ] Update knowledge graph with topics
+```
+
+## Step 1: Analyze Transcript (Claude Does This)
+
+Read full planning transcript or qualification notes.
+
+Follow rules from [references/AGENT_INSTRUCTIONS.MD](references/AGENT_INSTRUCTIONS.MD):
+- **CRITICAL**: `customer` = external org (NEVER "Microsoft")
+- Extract specific date if mentioned
+- Use transcript terminology for topics/descriptions
+- Standard items get standard descriptions
+- Custom topics get detailed, transcript-specific descriptions
+
+## Step 2: Extract Structured JSON (Claude Creates This)
+
+Required structure:
+
+```json
+{
+  "customer": "External Organization Name",
+  "date": "Month Day, Year",
+  "time": "9:30 AM - 4:00 PM",
+  "title": "Specific, Transcript-Driven Title",
+  "summary": "Why this session matters (synthesize, don't list items)",
+  "primaries": [
+    {"name": "Person Name", "role": "Role"}
+  ],
+  "supporting": [
+    {"name": "Person Name", "role": "Role"}  
+  ],
+  "agenda_items": [
+    {
+      "time": "9:30 AM - 9:45 AM",
+      "owner": "Microsoft",
+      "topic": "Introductions & Session Objectives",
+      "description": "Brief participant introductions. Overview of session goals and logistics."
+    },
+    {
+      "time": "9:45 AM - 11:00 AM",
+      "owner": "Microsoft & Customer",
+      "topic": "Discovery: Current State & Challenges",
+      "description": "Collaborative discovery of Customer's current environment..."
+    }
+  ]
+}
+```
+
+## Step 3: Agenda Item Rules
+
+**Sequence**: MUST follow:
+1. Intro/Goals (15 min)
+2. Discovery (~1 hour, customer-led)
+3. Custom topics from transcript
+4. Lunch (1 hour, for full-day only)
+5. More custom topics
+6. Next Steps (20-30 min)
+
+**Standard Items** (use these exact descriptions):
+
+**Introductions**:
+```
+"Brief participant introductions. Overview of session goals and desired outcomes. Logistics and housekeeping."
+```
+
+**Discovery**:
+```
+"Collaborative discovery of [Customer]'s current [domain] environment, processes, and challenges. Focus on understanding pain points, requirements, and business context."
+```
+Owner: `"Microsoft & Customer"`
+
+**Lunch Break** (full-day only):
+```
+"Working lunch - informal discussions and Q&A"
+```
+Owner: `"All"`
+
+**Next Steps**:
+```
+"Review key takeaways from the session. Define next steps, action items with owners and timelines. Schedule follow-up sessions as needed."
+```
+
+**Custom Topics** (transcript-driven):
+- Use EXACT phrasing from transcript
+- Highly detailed descriptions
+- Specific technologies, frameworks, use cases mentioned
+- NO generic summaries
+
+## Step 4: Show Preview to User
+
+Before generating JSON, show text preview:
+
+```
+PREVIEW: AstraZeneca Copilot Studio Validation
+Date: January 20, 2026
+Time: 9:00 AM - 1:00 PM
+
+AGENDA:
+9:00-9:15 | Introductions & Objectives [Microsoft]
+  Brief intros, session goals, logistics
+
+9:15-10:30 | Discovery: Current Copilot Studio Maturity [Microsoft & Customer]
+  Deep dive on existing 5,000+ agents, governance challenges with 
+  16,500 users, connector approval process, Agent 365 evaluation...
+
+[...remaining items...]
+
+Confirm: Team list, Date/Time, Customer name?
+```
+
+## Step 5: Render DOCX (Python Does This)
+
+After user confirms, save JSON and render:
+
+```python
+from scripts.core import create_agenda_doc
+
+# Save JSON first
+with open('engagement_folder/agenda_data.json', 'w') as f:
+    json.dump(agenda_data, f, indent=2)
+
+# Render DOCX
+template_path = 'assets/agenda_template.docx'
+output_path = 'engagement_folder/agenda.docx'
+
+create_agenda_doc(
+    data=agenda_data,
+    template_path=template_path,
+    output_path=output_path,
+    logo_path=None  # Optional logo
+)
+```
+
+## JSON Schema Details
+
+**Required Fields**:
+- `customer` (string): External organization name
+- `date` (string): "Month Day, Year" format
+- `time` (string): "Start - End" format  
+- `title` (string): Specific, concise title
+- `summary` (string): Why this session matters
+- `primaries` (array): Primary team members
+- `supporting` (array): Supporting team members
+- `agenda_items` (array): Agenda items with time/owner/topic/description
+
+**Optional Fields**:
+- `logo` (string): Path to logo file or base64 image
+
+## Example JSON
+
+See [assets/example_agenda.json](assets/example_agenda.json) for complete example.
+
+## Knowledge Graph Integration
+
+After generating agenda, store topics:
+
+```python
+for item in agenda_data['agenda_items']:
+    if item['topic'] not in ['Introductions', 'Lunch Break', 'Next Steps']:
+        memory:create_entities([{
+            "name": item['topic'],
+            "entityType": "Topic",
+            "observations": [
+                f"Description: {item['description']}",
+                f"Duration: {calculate_duration(item['time'])}",
+                f"Used in {customer} {engagement_type}"
+            ]
+        }])
+```
+
+## Quality Checks (Before Rendering)
+
+Verify:
+- [ ] `customer` is external org (NOT "Microsoft")
+- [ ] `date` is specific if mentioned in transcript
+- [ ] Custom topics have detailed, transcript-specific descriptions
+- [ ] Lunch included for full-day sessions (6+ hours)
+- [ ] Standard items use standard descriptions
+- [ ] Time slots don't overlap
+- [ ] Owner is appropriate ("Microsoft", "Microsoft & Customer", "All")
+
+## Common Patterns by Type
+
+**Discovery**:
+- 60-90 min customer-led discovery
+- Focus on current state, pain points
+- More listening than presenting
+
+**Architecture Review**:
+- Current architecture overview
+- Technical deep-dives with whiteboarding
+- Architecture recommendations
+
+**POC Kickoff**:
+- Clear success criteria
+- Technical requirements
+- POC timeline and milestones
+
+**Executive Briefing** (shorter):
+- Business value focus
+- High-level overview
+- Strategic alignment
+
+**Deep Dive**:
+- Multiple technical sessions
+- Hands-on components
+- Detailed action items
+
+## Dependencies
+
+Install: `pip install -r requirements.txt`
+
+## Reference Files
+
+- [references/AGENT_INSTRUCTIONS.MD](references/AGENT_INSTRUCTIONS.MD) - Complete extraction rules
+- [references/agent_instructions.md](references/agent_instructions.md) - Additional agenda patterns
+- [references/implementation.md](references/implementation.md) - Technical details
+- [assets/example_agenda.json](assets/example_agenda.json) - Example output
