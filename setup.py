@@ -318,61 +318,18 @@ def configure_vscode_workspace(repo_path, engagements_path):
         return False
 
 
-def launch_vscode(repo_path):
-    """Offer to launch VS Code."""
-    print_step(6, "Launching VS Code")
-    
-    response = input("\nWould you like to launch VS Code now? (y/n): ").strip().lower()
-    
-    if response != 'y':
-        print_info("Skipping VS Code launch.")
-        print("\nTo launch VS Code manually, run:")
-        print("  code .")
-        return False
-    
-    try:
-        # Check if 'code' command is available
-        result = subprocess.run(['code', '--version'], 
-                               capture_output=True, 
-                               timeout=5)
-        if result.returncode == 0:
-            print_info("Launching VS Code...")
-            # Launch VS Code in the current directory
-            subprocess.Popen(['code', '.'],
-                           cwd=str(repo_path),
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL)
-            print_success("VS Code launched!")
-            return True
-        else:
-            print_error("VS Code CLI not available.")
-            print_info("To launch VS Code manually, run:")
-            print("  code .")
-            return False
-    except (subprocess.TimeoutExpired, FileNotFoundError, OSError) as e:
-        print_error(f"Failed to launch VS Code: {e}")
-        print_info("To launch VS Code manually, run:")
-        print("  code .")
-        return False
-
-
-def show_completion(workspace_created, vscode_launched):
+def show_completion(workspace_created):
     """Show completion message."""
     print_header("Setup Complete!")
     
     print("You're ready to use Copilot Skills for Customer Engagements!\n")
     
     if workspace_created:
-        print("A workspace file has been created with both folders configured.")
-        if vscode_launched:
-            print("\n✓ VS Code should be launching now!")
-            print("  When VS Code opens, look for a notification in the lower-right corner")
-            print("  asking if you want to open the workspace. Click 'Yes' to load both folders.\n")
-        else:
-            print("\nTo get started:")
-            print("  1. Run: code .")
-            print("  2. When VS Code opens, click 'Yes' on the workspace notification")
-            print("     (lower-right corner) to load both folders.\n")
+        print("A workspace file has been created with both folders configured.\n")
+        print("To get started:")
+        print("  1. Run: code .")
+        print("  2. When VS Code opens, click 'Yes' on the workspace notification")
+        print("     (lower-right corner) to load both folders.\n")
     else:
         print("Next step: Launch VS Code in this directory")
         print("  Run: code .\n")
@@ -411,11 +368,8 @@ def main():
     # Configure VS Code workspace
     workspace_created = configure_vscode_workspace(repo_root, engagements_path)
     
-    # Offer to launch VS Code
-    vscode_launched = launch_vscode(repo_root)
-    
     # Show completion
-    show_completion(workspace_created, vscode_launched)
+    show_completion(workspace_created)
 
 
 if __name__ == "__main__":
