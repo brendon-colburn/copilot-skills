@@ -80,6 +80,31 @@ Storing engagements in OneDrive creates an AI skills layer for Microsoft 365 Cop
 - All engagement data is searchable and accessible to AI
 - Optional: Connect tasks.csv to Power Automate for automatic Planner task creation
 
+## Power Automate Integration
+
+The included Power Automate solution (`EngagementTaskAutomation_1_0_0_0.zip`) provides intelligent task scheduling with calendar conflict resolution:
+
+### What It Does
+
+1. **Monitors** your OneDrive Engagements folder for new `tasks.csv` files
+2. **Retrieves** 2 months of calendar events from your Office 365 calendar
+3. **Analyzes** conflicts using AI Builder's custom prompt model
+4. **Creates** a Planner bucket named after your engagement
+5. **Schedules** tasks with due dates that avoid your existing commitments
+
+### Setup
+
+1. Import the solution to your Power Automate environment
+2. Configure connections:
+   - OneDrive for Business (monitoring engagement folder)
+   - Office 365 (reading calendar)
+   - Dataverse (AI Builder model)
+   - Planner (creating tasks)
+3. Update the AI Builder model ID and Planner plan ID in the flow
+4. Enable the flow
+
+This automation bridges the gap between planning and execution, ensuring your engagement tasks integrate seamlessly with your existing schedule.
+
 ## Need Help?
 
 - Check `.github/skills/[skill-name]/references/` for skill documentation
