@@ -15,7 +15,7 @@ These skills automate common engagement tasks:
 - **GitHub Copilot** subscription (with Copilot Chat)
 - **VS Code** version 1.108 or later
 - **Agent Skills feature enabled** (currently in preview - see setup instructions below)
-- **Python 3.7+** for running automation scripts
+- **Python 3.7+** for running automation scripts (dependencies are automatically installed by the skills)
 - **Microsoft OneDrive** (recommended) - Enables M365 Copilot to leverage engagement data as a skills layer
 
 ## Quick Start
@@ -150,8 +150,9 @@ Transforms planning transcripts into professional DOCX agendas.
 2. Ask Copilot to build agenda from the transcript file
 3. Copilot reads the file and extracts structured data (customer, date, topics, participants)
 4. Shows preview for confirmation
-5. Generates professional DOCX agenda
-6. Saves to engagement folder
+5. **Automatically installs required Python packages** (no manual setup needed)
+6. Generates professional DOCX agenda
+7. Saves to engagement folder
 
 **Session types supported**:
 - Discovery Sessions

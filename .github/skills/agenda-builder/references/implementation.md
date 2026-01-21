@@ -16,6 +16,15 @@ Planning Transcript
    agenda.docx
 ```
 
+## Phase 0: Context Check (NEW)
+
+**ALWAYS do this first**: Check if engagement folder exists in workspace and read:
+- README.md (timeline, use cases, constraints)
+- engagement_metadata.json (structure, dates, attendees)
+- qualification_notes.md or scoping notes
+
+This context informs the agenda structure (single/multi-day, parallel tracks, use case count).
+
 ## Phase 1: Claude Extracts Data
 
 Claude reads transcript and creates structured JSON following AGENT_INSTRUCTIONS.MD.
@@ -194,7 +203,9 @@ Collaborative discovery of [Customer]'s current [domain] environment, processes,
 
 **Note**: Replace `[Customer]` and `[domain]` with specifics from transcript.
 
-**Owner**: `"Microsoft & Customer"` (collaborative)
+**Owner**: `"All"` or `"Microsoft and [Customer]"` (use actual customer name, not generic "Customer")
+
+**Encoding**: Use ASCII-safe punctuation - 'and' not '&', hyphens not em-dashes
 
 ### Lunch Break
 ```
