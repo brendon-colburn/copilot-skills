@@ -19,6 +19,7 @@ AI Agenda Building Process:
 - [ ] Show preview to user for confirmation
 - [ ] Get user approval/corrections
 - [ ] Save JSON to engagement folder
+- [ ] Automatically install required Python packages (if not already installed)
 - [ ] Call scripts/core.py to render DOCX
 - [ ] Update knowledge graph with topics
 ```
@@ -132,7 +133,16 @@ Confirm: Team list, Date/Time, Customer name?
 
 ## Step 5: Render DOCX (Python Does This)
 
-After user confirms, save JSON and render:
+After user confirms, save JSON and render.
+
+**IMPORTANT**: Before rendering, automatically ensure dependencies are installed:
+
+```bash
+# Check and install required packages automatically
+pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0
+```
+
+Then create the document:
 
 ```python
 from scripts.core import create_agenda_doc
@@ -152,6 +162,14 @@ create_agenda_doc(
     logo_path=None  # Optional logo
 )
 ```
+
+**Workflow for rendering**:
+1. Use bash tool to install dependencies: `pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0`
+2. Save the JSON data to a file in the engagement folder
+3. Create a Python script that imports from .github/skills/agenda-builder/scripts/core.py
+4. Execute the Python script using bash tool to generate the DOCX
+
+This approach ensures the skill "just works" without requiring manual virtual environment setup.
 
 ## JSON Schema Details
 
@@ -230,7 +248,19 @@ Verify:
 
 ## Dependencies
 
-Install: `pip install -r requirements.txt`
+**Automatic Installation**: Dependencies are automatically installed when rendering agendas.
+
+The skill uses these Python packages:
+- docxtpl>=0.16.0 (DOCX templating)
+- python-docx>=1.1.0 (DOCX manipulation)
+- Pillow>=10.0.0 (Image processing)
+
+**No manual setup required** - the skill automatically runs:
+```bash
+pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0
+```
+
+This ensures the skill "just works" like it does in Claude Desktop, without requiring virtual environment setup.
 
 ## Reference Files
 
