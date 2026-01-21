@@ -312,7 +312,29 @@ def configure_vscode_workspace(repo_path, engagements_path):
             json.dump(workspace_config, f, indent=2)
         
         print_success(f"Workspace file created: {workspace_path}")
-        print_info(f"Open this workspace in VS Code with: code {workspace_path}")
+        
+        # Try to automatically open the workspace in VS Code
+        try:
+            # Check if 'code' command is available
+            result = subprocess.run(['code', '--version'], 
+                                   capture_output=True, 
+                                   timeout=5)
+            if result.returncode == 0:
+                print_info("Attempting to open workspace in VS Code...")
+                subprocess.Popen(['code', str(workspace_path)],
+                               stdout=subprocess.DEVNULL,
+                               stderr=subprocess.DEVNULL)
+                print_success("Workspace should open in VS Code shortly!")
+                print_info("If VS Code doesn't open, you can manually open:")
+                print(f"  {workspace_path}")
+                return True
+        except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+            pass
+        
+        # If automatic opening failed, provide manual instructions
+        print_info("To open the workspace, run:")
+        print(f"  code {workspace_path}")
+        print("  Or open it from VS Code: File > Open Workspace from File")
         return True
     except (FileNotFoundError, PermissionError, json.JSONDecodeError, OSError) as e:
         print_error(f"Failed to create workspace file: {e}")
@@ -326,9 +348,9 @@ def show_completion(workspace_created):
     print("You're ready to use Copilot Skills for Customer Engagements!\n")
     
     if workspace_created:
-        print("Next step: Open the workspace file in VS Code")
-        print("  Run: code copilot-skills.code-workspace")
-        print("  Or: Open it from VS Code File menu\n")
+        print("A workspace file has been created with both folders configured.")
+        print("If VS Code didn't open automatically, open the workspace file:")
+        print("  File > Open Workspace from File > copilot-skills.code-workspace\n")
     else:
         print("Next step: Open this repository in VS Code\n")
     

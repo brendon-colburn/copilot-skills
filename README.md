@@ -20,7 +20,7 @@ Automate your customer engagement workflows with GitHub Copilot. Store engagemen
 Clone the repository and run the setup script:
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/brendon-colburn/copilot-skills.git
 cd copilot-skills
 python setup.py
 ```
