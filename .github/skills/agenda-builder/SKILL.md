@@ -253,7 +253,7 @@ Verify:
 
 **Automatic Installation**: Dependencies are automatically installed when rendering agendas.
 
-The skill uses these Python packages (defined in `requirements.txt`):
+The skill uses these Python packages (versions from `requirements.txt`):
 - docxtpl>=0.16.0 (DOCX templating)
 - python-docx>=1.1.0 (DOCX manipulation)
 - Pillow>=10.0.0 (Image processing)
@@ -263,7 +263,7 @@ The skill uses these Python packages (defined in `requirements.txt`):
 pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0
 ```
 
-**Note**: These are the same pinned versions from `requirements.txt`. Pip automatically skips packages that are already installed, making repeated runs efficient.
+**Note**: These versions use minimum version requirements (>=) as defined in requirements.txt. This allows compatible updates while maintaining a minimum baseline. Pip automatically skips packages that are already installed and meet the version requirements, making repeated runs efficient.
 
 This ensures the skill "just works" like it does in Claude Desktop, without requiring virtual environment setup.
 
