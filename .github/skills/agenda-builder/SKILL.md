@@ -139,6 +139,7 @@ After user confirms, save JSON and render.
 
 ```bash
 # Check and install required packages automatically
+# Note: pip will skip packages that are already installed
 pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0
 ```
 
@@ -165,6 +166,8 @@ create_agenda_doc(
 
 **Workflow for rendering**:
 1. Use bash tool to install dependencies: `pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0`
+   - Pip automatically skips packages that are already installed and up-to-date
+   - The `--quiet` flag minimizes output for a cleaner experience
 2. Save the JSON data to a file in the engagement folder
 3. Create a Python script that imports from .github/skills/agenda-builder/scripts/core.py
 4. Execute the Python script using bash tool to generate the DOCX
@@ -250,7 +253,7 @@ Verify:
 
 **Automatic Installation**: Dependencies are automatically installed when rendering agendas.
 
-The skill uses these Python packages:
+The skill uses these Python packages (defined in `requirements.txt`):
 - docxtpl>=0.16.0 (DOCX templating)
 - python-docx>=1.1.0 (DOCX manipulation)
 - Pillow>=10.0.0 (Image processing)
@@ -259,6 +262,8 @@ The skill uses these Python packages:
 ```bash
 pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0
 ```
+
+**Note**: These are the same pinned versions from `requirements.txt`. Pip automatically skips packages that are already installed, making repeated runs efficient.
 
 This ensures the skill "just works" like it does in Claude Desktop, without requiring virtual environment setup.
 
