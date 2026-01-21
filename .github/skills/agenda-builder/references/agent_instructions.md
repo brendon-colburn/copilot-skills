@@ -141,9 +141,15 @@ Confirm or correct?
 6. Next Steps (20-30 min)
 
 **Descriptions**:
-- Standard items: Use consistent patterns
+- Standard items: Use consistent patterns with ASCII-safe punctuation
 - Custom topics: Highly detailed with transcript terminology
 - Include success factors from knowledge graph
+- Use 'and' not '&', hyphens not em-dashes
+
+**Owner Field Rules**:
+- Microsoft-only sessions: `"Microsoft"`
+- Collaborative sessions: `"All"` or `"Microsoft and [ActualCustomerName]"` (use real customer name)
+- NEVER use generic "Customer" or "Microsoft & Customer"
 
 **Quality Checks**:
 ✓ Customer = external org (NOT "Microsoft")

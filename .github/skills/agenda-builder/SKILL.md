@@ -13,11 +13,12 @@ Claude does the intelligent extraction. Python just renders the template.
 
 ```
 AI Agenda Building Process:
+- [ ] Check for existing engagement folder and read README/metadata/notes first
 - [ ] Analyze planning transcript/notes
 - [ ] Extract structured data following AGENT_INSTRUCTIONS.MD
-- [ ] Create JSON with customer, date, title, summary, agenda_items
-- [ ] Show preview to user for confirmation
-- [ ] Get user approval/corrections
+- [ ] ⚠️ MANDATORY CHECKPOINT: Show preview to user for confirmation
+- [ ] ⚠️ MANDATORY: Get user approval/corrections (DO NOT PROCEED WITHOUT THIS)
+- [ ] ONLY AFTER APPROVAL: Create JSON with customer, date, title, summary, agenda_items
 - [ ] Save JSON to engagement folder
 - [ ] Automatically install required Python packages (if not already installed)
 - [ ] Call scripts/core.py to render DOCX
@@ -35,7 +36,18 @@ Follow rules from [references/AGENT_INSTRUCTIONS.MD](references/AGENT_INSTRUCTIO
 - Standard items get standard descriptions
 - Custom topics get detailed, transcript-specific descriptions
 
-## Step 2: Extract Structured JSON (Claude Creates This)
+## Step 2: Understand JSON Structure (DO NOT CREATE YET)
+
+⚠️ **CRITICAL - DO NOT EXECUTE THIS STEP YET**
+
+This section shows the JSON structure you will create AFTER user approves the preview in Step 4.
+
+**MANDATORY WORKFLOW:**
+1. Analyze transcript/materials (Step 1)
+2. Show text preview to user (Step 4) ← YOU MUST DO THIS NEXT
+3. Get user approval
+4. ONLY THEN create this JSON structure
+5. Render DOCX (Step 5)
 
 Required structure:
 
@@ -85,12 +97,13 @@ Required structure:
 ```
 "Brief participant introductions. Overview of session goals and desired outcomes. Logistics and housekeeping."
 ```
+**Note**: Use ASCII-safe punctuation only (hyphens not em-dashes, 'and' not '&')
 
 **Discovery**:
 ```
 "Collaborative discovery of [Customer]'s current [domain] environment, processes, and challenges. Focus on understanding pain points, requirements, and business context."
 ```
-Owner: `"Microsoft & Customer"`
+Owner: `"All"` or `"Microsoft and [Customer]"`
 
 **Lunch Break** (full-day only):
 ```
@@ -109,9 +122,24 @@ Owner: `"All"`
 - Specific technologies, frameworks, use cases mentioned
 - NO generic summaries
 
-## Step 4: Show Preview to User
+## Step 3.5: Multi-Day Workshops
 
-Before generating JSON, show text preview:
+**For multi-day engagements**: Always create ONE combined agenda document with all days included.
+
+**Metadata Validation**: Before rendering, check engagement_metadata.json if it exists:
+- Verify use case count matches
+- Confirm dates align
+- Validate attendee lists
+
+## Step 4: Show Preview to User ⚠️ MANDATORY CHECKPOINT
+
+🛑 **STOP - You MUST complete this step before creating JSON or rendering DOCX**
+
+**Never skip this step.** Always show a text preview and wait for user confirmation.
+
+**Why this matters:** User may want to adjust timing, attendee lists, descriptions, or overall structure. Generating the document without approval wastes time and creates rework.
+
+Show text preview:
 
 ```
 PREVIEW: AstraZeneca Copilot Studio Validation
@@ -131,48 +159,37 @@ AGENDA:
 Confirm: Team list, Date/Time, Customer name?
 ```
 
-## Step 5: Render DOCX (Python Does This)
+## Step 5: Create JSON and Render DOCX (Only After User Approval)
+
+✅ **PREREQUISITE:** User must have approved the preview from Step 4.
 
 After user confirms, save JSON and render.
 
-**IMPORTANT**: Before rendering, automatically ensure dependencies are installed:
-
-```bash
-# Check and install required packages automatically
-# Note: pip will skip packages that are already installed
-pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0
-```
-
-Then create the document:
-
-```python
-from scripts.core import create_agenda_doc
-
-# Save JSON first
-with open('engagement_folder/agenda_data.json', 'w') as f:
-    json.dump(agenda_data, f, indent=2)
-
-# Render DOCX
-template_path = 'assets/agenda_template.docx'
-output_path = 'engagement_folder/agenda.docx'
-
-create_agenda_doc(
-    data=agenda_data,
-    template_path=template_path,
-    output_path=output_path,
-    logo_path=None  # Optional logo
-)
-```
+**CRITICAL**: DO NOT create custom render scripts or separate .py files. Use ONLY the inline Python one-liner approach shown below.
 
 **Workflow for rendering**:
-1. Use bash tool to install dependencies: `pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0`
-   - Pip automatically skips packages that are already installed and up-to-date
-   - The `--quiet` flag minimizes output for a cleaner experience
-2. Save the JSON data to a file in the engagement folder
-3. Create a Python script that imports from .github/skills/agenda-builder/scripts/core.py
-4. Execute the Python script using bash tool to generate the DOCX
+1. Install dependencies: `pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0`
+   - Pip automatically skips packages that are already installed
+   - The `--quiet` flag minimizes output
+2. Save the JSON data to agenda_data.json in the engagement folder (JSON already created above)
+3. Execute the rendering using a Python one-liner (DO NOT create a separate .py file)
 
-This approach ensures the skill "just works" without requiring manual virtual environment setup.
+**Required one-liner template**:
+```bash
+python -c "import json, sys; sys.path.insert(0, r'SKILLS_PATH\.github\skills\agenda-builder'); from scripts.core import create_agenda_doc; agenda_data = json.load(open(r'ENGAGEMENT_PATH\agenda_data.json')); create_agenda_doc(agenda_data, r'SKILLS_PATH\.github\skills\agenda-builder\assets\agenda_template.docx', r'ENGAGEMENT_PATH\OUTPUT_FILENAME.docx', None); print('Agenda created successfully')"
+```
+
+**Example for Windows**:
+```bash
+python -c "import json, sys; sys.path.insert(0, r'c:\Projects\copilot-skills-1\.github\skills\agenda-builder'); from scripts.core import create_agenda_doc; agenda_data = json.load(open(r'c:\Users\brecol\OneDrive - Microsoft\Engagements\Customer-2026-01-20\agenda_data.json')); create_agenda_doc(agenda_data, r'c:\Projects\copilot-skills-1\.github\skills\agenda-builder\assets\agenda_template.docx', r'c:\Users\brecol\OneDrive - Microsoft\Engagements\Customer-2026-01-20\Customer_Agenda.docx', None); print('Agenda created successfully')"
+```
+
+**Example for Unix/Mac**:
+```bash
+python -c "import json, sys; sys.path.insert(0, '/path/to/copilot-skills/.github/skills/agenda-builder'); from scripts.core import create_agenda_doc; agenda_data = json.load(open('/path/to/engagement/agenda_data.json')); create_agenda_doc(agenda_data, '/path/to/copilot-skills/.github/skills/agenda-builder/assets/agenda_template.docx', '/path/to/engagement/Customer_Agenda.docx', None); print('Agenda created successfully')"
+```
+
+This one-liner approach ensures the skill works without creating extra files or requiring virtual environment setup.
 
 ## JSON Schema Details
 
@@ -248,6 +265,13 @@ Verify:
 - Multiple technical sessions
 - Hands-on components
 - Detailed action items
+
+**Multi-Day Parallel Track Workshop**:
+- Day headers as agenda items (e.g., "DAY 1 - Feb 3, 2026")
+- Parallel breakout sessions (Tracks A/B/C)
+- Scheduled show-and-tell syncs
+- Daily wrap-ups and planning
+- See AstraZeneca workshop example in references/
 
 ## Dependencies
 
