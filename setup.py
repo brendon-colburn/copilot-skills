@@ -106,8 +106,7 @@ def create_config_file():
             root.attributes('-topmost', True)  # Bring dialog to front
             
             folder_path = filedialog.askdirectory(
-                title="Select OneDrive Engagements Folder",
-                mustexist=False
+                title="Select OneDrive Engagements Folder"
             )
             
             root.destroy()
@@ -334,8 +333,8 @@ def show_completion(workspace_created):
         print("Next step: Open this repository in VS Code\n")
     
     print("Try these commands in VS Code Copilot Chat:\n")
-    print('  "initiate an engagement for Contoso on 2026-03-15"')
-    print('  "generate tasks for Project Phoenix on 2026-04-20"')
+    print('  "initiate an engagement for Contoso on March 15"')
+    print('  "generate tasks for Project Phoenix starting in 30 days"')
     print('  "build agenda from planning_transcript.txt"')
     print("\nFor more information, see README.md")
     print("\nHappy engaging! 🚀\n")
