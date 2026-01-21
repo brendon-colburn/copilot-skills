@@ -29,9 +29,10 @@ python setup.py
 
 The script will:
 - ✓ Check Python version
-- ✓ Create and configure `config.json`
+- ✓ Create and configure `config.json` (with optional file picker)
 - ✓ Install Python dependencies
-- ✓ Provide VS Code setup instructions
+- ✓ Automatically enable Agent Skills in VS Code
+- ✓ Create workspace file with both folders configured
 
 ### Manual Setup
 

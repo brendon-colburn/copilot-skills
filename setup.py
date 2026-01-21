@@ -70,15 +70,16 @@ def create_config_file():
             print("Skipping configuration file creation.")
             # Return the existing path
             try:
-                with open(config_path, 'r') as f:
+                with open(config_path, 'r', encoding='utf-8') as f:
                     config = json.load(f)
                     return True, config.get("engagements_base_path")
-            except:
+            except (FileNotFoundError, json.JSONDecodeError, PermissionError) as e:
+                print_error(f"Failed to read existing config: {e}")
                 return True, None
     
     # Read the example config
     try:
-        with open(example_path, 'r') as f:
+        with open(example_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
     except Exception as e:
         print_error(f"Failed to read config.example.json: {e}")
@@ -158,7 +159,7 @@ def create_config_file():
     
     # Write the config file
     try:
-        with open(config_path, 'w') as f:
+        with open(config_path, 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=2)
         print_success(f"Created config.json at: {config_path}")
         return True, normalized_path
@@ -207,7 +208,12 @@ def get_vscode_settings_path():
     """Get the path to VS Code user settings.json."""
     system = platform.system()
     if system == "Windows":
-        settings_dir = Path(os.environ.get('APPDATA', '')) / "Code" / "User"
+        appdata = os.environ.get('APPDATA')
+        if appdata:
+            settings_dir = Path(appdata) / "Code" / "User"
+        else:
+            # Fallback for Windows if APPDATA is not set
+            settings_dir = Path.home() / "AppData" / "Roaming" / "Code" / "User"
     elif system == "Darwin":  # macOS
         settings_dir = Path.home() / "Library" / "Application Support" / "Code" / "User"
     else:  # Linux
@@ -241,7 +247,7 @@ def configure_vscode_settings():
         
         # Read existing settings or create empty dict
         if settings_path.exists():
-            with open(settings_path, 'r') as f:
+            with open(settings_path, 'r', encoding='utf-8') as f:
                 settings = json.load(f)
         else:
             settings = {}
@@ -250,7 +256,7 @@ def configure_vscode_settings():
         settings["chat.useAgentSkills"] = True
         
         # Write updated settings
-        with open(settings_path, 'w') as f:
+        with open(settings_path, 'w', encoding='utf-8') as f:
             json.dump(settings, f, indent=2)
         
         print_success("VS Code Agent Skills enabled!")
@@ -303,7 +309,7 @@ def configure_vscode_workspace(repo_path, engagements_path):
             }
         }
         
-        with open(workspace_path, 'w') as f:
+        with open(workspace_path, 'w', encoding='utf-8') as f:
             json.dump(workspace_config, f, indent=2)
         
         print_success(f"Workspace file created: {workspace_path}")
