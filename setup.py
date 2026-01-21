@@ -103,12 +103,14 @@ def create_config_file():
             if response != 'y':
                 continue
         
-        # Convert to proper format for JSON (use forward slashes or double backslashes)
+        # Normalize the path and convert to proper format for JSON
+        # On Windows, ensure backslashes are properly escaped for JSON
+        normalized_path = os.path.normpath(expanded_path)
         if platform.system() == "Windows":
-            # Use double backslashes for Windows
-            json_path = engagements_path.replace('/', '\\')
+            # Replace single backslashes with double backslashes for JSON
+            json_path = normalized_path.replace('\\', '\\\\')
         else:
-            json_path = expanded_path
+            json_path = normalized_path
         
         config["engagements_base_path"] = json_path
         break
