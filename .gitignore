@@ -10,6 +10,9 @@ __pycache__/
 .Python
 *.csv
 
+# Stray pip files
+=*.*
+
 # VS Code
 .vscode/
 
