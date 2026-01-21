@@ -81,7 +81,7 @@ def create_config_file():
     try:
         with open(example_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
-    except Exception as e:
+    except (FileNotFoundError, PermissionError, json.JSONDecodeError) as e:
         print_error(f"Failed to read config.example.json: {e}")
         return False, None
     
@@ -261,7 +261,7 @@ def configure_vscode_settings():
         
         print_success("VS Code Agent Skills enabled!")
         return True
-    except Exception as e:
+    except (FileNotFoundError, PermissionError, json.JSONDecodeError, OSError) as e:
         print_error(f"Failed to update VS Code settings: {e}")
         print_info("You can manually enable it in VS Code Settings.")
         return False
@@ -315,7 +315,7 @@ def configure_vscode_workspace(repo_path, engagements_path):
         print_success(f"Workspace file created: {workspace_path}")
         print_info(f"Open this workspace in VS Code with: code {workspace_path}")
         return True
-    except Exception as e:
+    except (FileNotFoundError, PermissionError, json.JSONDecodeError, OSError) as e:
         print_error(f"Failed to create workspace file: {e}")
         return False
 
@@ -377,6 +377,10 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\n\nSetup cancelled by user.")
         sys.exit(1)
+    except SystemExit:
+        raise  # Allow sys.exit() to work properly
     except Exception as e:
         print_error(f"Unexpected error: {e}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
