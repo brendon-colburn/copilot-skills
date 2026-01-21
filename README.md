@@ -17,39 +17,17 @@ Automate your customer engagement workflows with GitHub Copilot. Store engagemen
 
 ## Setup
 
-### 1. Clone and Configure
+Clone the repository and run the setup script:
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/brendon-colburn/copilot-skills.git
 cd copilot-skills
-copy config.example.json config.json
+python setup.py
 ```
 
-Edit `config.json` with your OneDrive path:
+The interactive script will configure everything for you.
 
-```json
-{
-  "engagements_base_path": "C:\\Users\\<your-username>\\OneDrive - Microsoft\\Engagements"
-}
-```
-
-### 2. Enable Agent Skills in VS Code
-
-1. Open VS Code Settings (`Ctrl+,` or `Cmd+,`)
-2. Search for `chat.useAgentSkills`
-3. Enable **Chat: Use Agent Skills**
-
-### 3. Add Workspace Folders
-
-For optimal functionality, add both folders to your VS Code workspace:
-
-1. Open this repository folder in VS Code
-2. Go to **File > Add Folder to Workspace**
-3. Add your OneDrive Engagements folder (e.g., `C:\Users\<your-username>\OneDrive - Microsoft\Engagements`)
-
-This allows Copilot to directly access and manage your engagement files.
-
-### 4. Start Using Skills
+## Start Using Skills
 
 Skills load automatically when you ask for them - just start chatting with Copilot!
 
@@ -101,18 +79,6 @@ Storing engagements in OneDrive creates an AI skills layer for Microsoft 365 Cop
 - M365 Copilot can help with engagement prep and summaries
 - All engagement data is searchable and accessible to AI
 - Optional: Connect tasks.csv to Power Automate for automatic Planner task creation
-
-## Configuration
-
-Your `config.json` tells the skills where to create engagements:
-
-```json
-{
-  "engagements_base_path": "C:\\Users\\<username>\\OneDrive - Microsoft\\Engagements"
-}
-```
-
-Use double backslashes (`\\`) on Windows.
 
 ## Need Help?
 
