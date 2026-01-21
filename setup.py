@@ -93,26 +93,19 @@ def create_config_file():
             print_error("Path cannot be empty")
             continue
         
-        # Expand user home directory if needed
+        # Expand user home directory and normalize the path
         expanded_path = os.path.expanduser(engagements_path)
+        normalized_path = os.path.normpath(expanded_path)
         
         # Ask user to confirm if path doesn't exist
-        if not os.path.exists(expanded_path):
-            print_info(f"Path does not exist yet: {expanded_path}")
+        if not os.path.exists(normalized_path):
+            print_info(f"Path does not exist yet: {normalized_path}")
             response = input("Do you want to create it later and continue? (y/n): ").strip().lower()
             if response != 'y':
                 continue
         
-        # Normalize the path and convert to proper format for JSON
-        # On Windows, ensure backslashes are properly escaped for JSON
-        normalized_path = os.path.normpath(expanded_path)
-        if platform.system() == "Windows":
-            # Replace single backslashes with double backslashes for JSON
-            json_path = normalized_path.replace('\\', '\\\\')
-        else:
-            json_path = normalized_path
-        
-        config["engagements_base_path"] = json_path
+        # json.dump() will automatically escape backslashes for JSON
+        config["engagements_base_path"] = normalized_path
         break
     
     # Write the config file
