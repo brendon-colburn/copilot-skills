@@ -17,7 +17,27 @@ Automate your customer engagement workflows with GitHub Copilot. Store engagemen
 
 ## Setup
 
-### 1. Clone and Configure
+### Quick Setup (Recommended)
+
+Run the interactive setup script that guides you through all configuration steps:
+
+```bash
+git clone <your-repo-url>
+cd copilot-skills
+python setup.py
+```
+
+The script will:
+- ✓ Check Python version
+- ✓ Create and configure `config.json`
+- ✓ Install Python dependencies
+- ✓ Provide VS Code setup instructions
+
+### Manual Setup
+
+If you prefer to configure manually:
+
+**1. Clone and Configure**
 
 ```bash
 git clone <your-repo-url>
@@ -33,13 +53,19 @@ Edit `config.json` with your OneDrive path:
 }
 ```
 
-### 2. Enable Agent Skills in VS Code
+**2. Install Dependencies**
+
+```bash
+pip install -r .github/skills/agenda-builder/requirements.txt
+```
+
+**3. Enable Agent Skills in VS Code**
 
 1. Open VS Code Settings (`Ctrl+,` or `Cmd+,`)
 2. Search for `chat.useAgentSkills`
 3. Enable **Chat: Use Agent Skills**
 
-### 3. Add Workspace Folders
+**4. Add Workspace Folders**
 
 For optimal functionality, add both folders to your VS Code workspace:
 
@@ -49,7 +75,7 @@ For optimal functionality, add both folders to your VS Code workspace:
 
 This allows Copilot to directly access and manage your engagement files.
 
-### 4. Start Using Skills
+### Start Using Skills
 
 Skills load automatically when you ask for them - just start chatting with Copilot!
 
