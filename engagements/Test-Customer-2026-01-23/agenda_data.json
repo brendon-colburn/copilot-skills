@@ -1,0 +1,45 @@
+{
+  "customer": "Test Customer",
+  "date": "January 23, 2026",
+  "time": "9:00 AM - 12:30 PM EST",
+  "title": "Architecture Design Session: Microsoft Foundry vs Copilot Studio with Private Endpoints",
+  "summary": "Strategic architecture session to evaluate Microsoft Foundry and Copilot Studio platforms, design private endpoint implementation for secure enterprise AI deployment, and align on architectural approach for Test Customer's requirements.",
+  "primaries": [
+    {"name": "Microsoft Solutions Architect", "role": "Technical Lead"}
+  ],
+  "supporting": [
+    {"name": "Microsoft Security Specialist", "role": "Private Endpoints SME"}
+  ],
+  "agenda_items": [
+    {
+      "time": "9:00 AM - 9:15 AM",
+      "owner": "Microsoft",
+      "topic": "Introductions & Session Objectives",
+      "description": "Brief participant introductions. Overview of session goals and desired outcomes. Logistics and housekeeping."
+    },
+    {
+      "time": "9:15 AM - 10:30 AM",
+      "owner": "Microsoft & Test Customer",
+      "topic": "Discovery: Current Architecture & Requirements",
+      "description": "Collaborative discovery of Test Customer's current AI platform architecture, use cases, and challenges. Focus on understanding requirements for private endpoints, data residency needs, security constraints, and business context for choosing between Microsoft Foundry and Copilot Studio."
+    },
+    {
+      "time": "10:30 AM - 11:15 AM",
+      "owner": "Microsoft",
+      "topic": "Microsoft Foundry vs Copilot Studio: Architecture Deep Dive",
+      "description": "Detailed comparison of Microsoft Foundry and Copilot Studio architectures. Review capabilities, deployment models, integration patterns, and extensibility options. Focus on how each platform addresses enterprise AI scenarios and governance requirements."
+    },
+    {
+      "time": "11:15 AM - 12:00 PM",
+      "owner": "Microsoft & Test Customer",
+      "topic": "Private Endpoints Solution Architecture",
+      "description": "Technical deep dive on implementing private endpoints for secure connectivity. Architecture patterns for network isolation, VNet integration, DNS configuration, and service endpoint policies. Whiteboarding session to design the optimal private endpoint architecture for Test Customer's specific requirements and constraints."
+    },
+    {
+      "time": "12:00 PM - 12:30 PM",
+      "owner": "All",
+      "topic": "Next Steps & Action Items",
+      "description": "Review key takeaways from the session. Define next steps, action items with owners and timelines. Schedule follow-up sessions as needed."
+    }
+  ]
+}
