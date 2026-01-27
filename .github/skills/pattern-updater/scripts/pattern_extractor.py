@@ -218,7 +218,14 @@ class PatternExtractor:
         # Find new success patterns
         existing_success = set([s['id'] for s in existing_patterns.get('success_patterns', [])])
         for pattern in extracted_patterns['success_patterns']:
-            pattern_id = pattern.lower().replace(' ', '_').replace('-', '_')[:50]
+            # Create a shorter but safer ID
+            pattern_id = pattern.lower().replace(' ', '_').replace('-', '_')
+            # If truncation needed, add hash suffix to ensure uniqueness
+            if len(pattern_id) > 50:
+                import hashlib
+                hash_suffix = hashlib.md5(pattern.encode()).hexdigest()[:8]
+                pattern_id = pattern_id[:42] + '_' + hash_suffix
+            
             if pattern_id not in existing_success:
                 new_patterns['success_patterns'].append({
                     'id': pattern_id,
@@ -228,7 +235,13 @@ class PatternExtractor:
         # Find new discovery frameworks
         existing_discovery = set([d['id'] for d in existing_patterns.get('discovery_frameworks', [])])
         for framework in extracted_patterns['discovery_frameworks']:
-            framework_id = framework.lower().replace(' ', '_').replace('-', '_')[:50]
+            framework_id = framework.lower().replace(' ', '_').replace('-', '_')
+            # If truncation needed, add hash suffix to ensure uniqueness
+            if len(framework_id) > 50:
+                import hashlib
+                hash_suffix = hashlib.md5(framework.encode()).hexdigest()[:8]
+                framework_id = framework_id[:42] + '_' + hash_suffix
+            
             if framework_id not in existing_discovery:
                 new_patterns['discovery_frameworks'].append({
                     'id': framework_id,

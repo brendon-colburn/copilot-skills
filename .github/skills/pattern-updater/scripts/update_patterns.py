@@ -142,9 +142,12 @@ class PatternUpdater:
             with open(self.engagement_types_file, 'r', encoding='utf-8') as f:
                 content = f.read()
             
+            # Use consistent timestamp
+            update_date = datetime.now().strftime('%Y-%m-%d')
+            
             # Find the section to append new types
             # This is simplified - in a real implementation, you'd parse the markdown structure
-            new_content = f"\n\n## Newly Added Types ({datetime.now().strftime('%Y-%m-%d')})\n\n"
+            new_content = f"\n\n## Newly Added Types ({update_date})\n\n"
             
             for eng_type in new_types:
                 new_content += f"### {eng_type.get('name', eng_type.get('id'))}\n\n"
@@ -173,7 +176,10 @@ class PatternUpdater:
             return False
         
         try:
-            new_content = f"\n\n## Newly Added Frameworks ({datetime.now().strftime('%Y-%m-%d')})\n\n"
+            # Use consistent timestamp
+            update_date = datetime.now().strftime('%Y-%m-%d')
+            
+            new_content = f"\n\n## Newly Added Frameworks ({update_date})\n\n"
             
             for framework in new_frameworks:
                 new_content += f"### {framework.get('name', framework.get('id'))}\n\n"

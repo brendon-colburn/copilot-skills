@@ -358,7 +358,7 @@ def configure_pattern_updater_scheduler(repo_root):
             else:
                 schedule = input("Enter custom schedule (e.g., '/sc weekly /d MON /st 09:00'): ").strip()
             
-            task_cmd = f'schtasks /create /tn "Copilot Pattern Updater" /tr "python {script_path}" {schedule} /f'
+            task_cmd = f'schtasks /create /tn "Copilot Pattern Updater" /tr "\"{sys.executable}\" \"{script_path}\"" {schedule} /f'
             print_info(f"Creating task: {task_cmd}")
             print_info("Note: This requires administrator privileges.")
             
@@ -439,7 +439,7 @@ def configure_pattern_updater_scheduler(repo_root):
             else:
                 cron_schedule = input("Enter custom cron schedule (e.g., '0 9 * * 1' for weekly Monday 9am): ").strip()
             
-            cron_line = f"{cron_schedule} cd {repo_root} && {sys.executable} {script_path} >> {Path.home()}/pattern-updater.log 2>&1\n"
+            cron_line = f'{cron_schedule} cd "{repo_root}" && "{sys.executable}" "{script_path}" >> "{Path.home()}/pattern-updater.log" 2>&1\n'
             
             print_info(f"Add this line to your crontab:")
             print(f"  {cron_line}")
