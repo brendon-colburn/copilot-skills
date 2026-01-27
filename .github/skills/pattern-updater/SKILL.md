@@ -108,24 +108,43 @@ python .github/skills/pattern-updater/scripts/run_update.py
 
 ### Scheduled Execution
 
-For automated monthly updates, configure a scheduler:
+For automated monthly updates, configure a scheduler.
+
+**If you haven't run setup yet:**
+```bash
+python setup.py
+# Answer 'y' when asked about automated pattern updates
+```
+
+**If you already ran setup but want to enable scheduling now:**
+```bash
+# Option 1: Standalone script (recommended)
+python configure_scheduler.py
+
+# Option 2: Run setup with scheduler-only flag
+python setup.py --scheduler-only
+```
+
+**Platform-specific commands:**
 
 **Windows (Task Scheduler)**:
 ```powershell
-# Run during setup.py - creates monthly task
-schtasks /create /tn "Pattern Updater" /tr "python run_update.py" /sc monthly
+# Manually create task (if needed)
+schtasks /create /tn "Copilot Pattern Updater" /tr "python C:\path\to\repo\.github\skills\pattern-updater\scripts\run_update.py" /sc monthly /d 1 /st 09:00
 ```
 
 **macOS (launchd)**:
 ```bash
-# Create ~/Library/LaunchAgents/com.copilot.patternupdater.plist
-# Configure with setup.py
+# LaunchAgent plist created automatically by configure_scheduler.py
+# Location: ~/Library/LaunchAgents/com.copilot.patternupdater.plist
 ```
 
 **Linux (cron)**:
 ```bash
-# Add to crontab
-0 9 1 * * cd /path/to/repo && python run_update.py
+# Edit crontab
+crontab -e
+# Add this line for monthly updates (1st of month at 9 AM):
+0 9 1 * * cd /path/to/repo && python .github/skills/pattern-updater/scripts/run_update.py >> ~/pattern-updater.log 2>&1
 ```
 
 ## Changelog Reports

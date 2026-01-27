@@ -152,7 +152,33 @@ Generated in `patterns/changelog/YYYY-MM.md`:
 
 ## Automated Updates (Optional)
 
-If you configured automated updates during setup, patterns will be automatically extracted on your chosen schedule (monthly or weekly).
+### Enable Scheduling After Initial Setup
+
+If you've already run `setup.py` and want to enable automated updates now:
+
+**Option 1: Standalone Script (Easiest)**
+```bash
+python configure_scheduler.py
+```
+
+**Option 2: Setup Script Flag**
+```bash
+python setup.py --scheduler-only
+```
+
+Both options will guide you through:
+1. Choosing update frequency (monthly/weekly/custom)
+2. Configuring platform-specific scheduler
+3. Setting up logging
+
+### Enable During Initial Setup
+
+If you haven't run setup yet, just run:
+```bash
+python setup.py
+```
+
+Answer 'y' when asked: "Do you want to set up automated pattern updates?"
 
 ### Check Scheduler Status
 

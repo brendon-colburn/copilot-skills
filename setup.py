@@ -4,6 +4,7 @@ Interactive setup script for Copilot Skills for Customer Engagements.
 Guides users through all configuration steps.
 """
 
+import argparse
 import json
 import os
 import platform
@@ -512,10 +513,56 @@ def show_completion(workspace_created, scheduler_configured):
 
 def main():
     """Main setup flow."""
-    print_header("Copilot Skills for Customer Engagements - Setup")
-    print("This script will guide you through the configuration process.\n")
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description='Setup script for Copilot Skills for Customer Engagements',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python setup.py                    # Run full setup
+  python setup.py --scheduler-only   # Configure scheduler only
+  python setup.py --help             # Show this help message
+        """
+    )
+    parser.add_argument(
+        '--scheduler-only',
+        action='store_true',
+        help='Configure only the pattern updater scheduler (skip other setup steps)'
+    )
+    
+    args = parser.parse_args()
     
     repo_root = Path(__file__).parent
+    
+    # Scheduler-only mode
+    if args.scheduler_only:
+        print_header("Pattern Updater Scheduler Configuration")
+        print("Configuring automated pattern updates only.\n")
+        
+        # Check if config.json exists
+        config_path = repo_root / "config.json"
+        if not config_path.exists():
+            print_error("config.json not found!")
+            print_info("Please run 'python setup.py' (without --scheduler-only) first to complete initial setup.")
+            sys.exit(1)
+        
+        # Configure scheduler
+        scheduler_configured = configure_pattern_updater_scheduler(repo_root)
+        
+        # Show completion
+        print("\n" + "=" * 70)
+        if scheduler_configured:
+            print("✓ Scheduler configuration complete!")
+            print("\nAutomated pattern updates are now enabled.")
+        else:
+            print("Scheduler configuration skipped.")
+            print("\nRun 'python setup.py --scheduler-only' again to configure scheduling.")
+        print("=" * 70 + "\n")
+        return
+    
+    # Full setup mode
+    print_header("Copilot Skills for Customer Engagements - Setup")
+    print("This script will guide you through the configuration process.\n")
     
     # Check Python version
     if not check_python_version():

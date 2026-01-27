@@ -80,6 +80,8 @@ Automatically extracts patterns from your engagement history and updates the kno
 
 Generates a changelog report showing what patterns were added.
 
+**Optional automation**: Enable scheduled updates with `python configure_scheduler.py`
+
 ## Example Workflow
 
 ```
