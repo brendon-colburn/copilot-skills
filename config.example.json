@@ -1,3 +1,7 @@
 {
-  "engagements_base_path": "C:\\Users\\<username>\\OneDrive - CompanyName\\Engagements"
+  "engagements_base_path": "C:\\Users\\<username>\\OneDrive - CompanyName\\Engagements",
+  "pattern_updater": {
+    "auto_update": false,
+    "schedule": "monthly"
+  }
 }
