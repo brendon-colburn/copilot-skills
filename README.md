@@ -7,6 +7,7 @@ Automate your customer engagement workflows with GitHub Copilot. Store engagemen
 - **Create engagement folders** with task timelines and metadata
 - **Generate task schedules** with automatic business day calculations
 - **Build professional agendas** from planning transcripts
+- **Extract and update patterns** from your engagement history
 
 ## What You Need
 
@@ -63,6 +64,24 @@ Transforms planning transcripts into professional agendas. Supports Discovery, A
 
 **Tip**: Save transcripts to your engagement folder first for better results.
 
+### Update Patterns
+
+```
+"update patterns from my engagements"
+"refresh the pattern knowledge base"
+"extract patterns from recent engagements"
+```
+
+Automatically extracts patterns from your engagement history and updates the knowledge base:
+- Engagement types (Discovery, Architecture Review, POC, etc.)
+- Industry patterns (Healthcare, Finance, Construction, etc.)
+- Success factors and key learnings
+- Discovery frameworks and approaches
+
+Generates a changelog report showing what patterns were added.
+
+**Optional automation**: Enable scheduled updates with `python configure_scheduler.py`
+
 ## Example Workflow
 
 ```
@@ -71,6 +90,7 @@ Transforms planning transcripts into professional agendas. Supports Discovery, A
 3. "build agenda from transcript.txt in the Contoso-2026-03-15 folder"
 4. Share agenda with customer
 5. Execute engagement and complete follow-up tasks
+6. "update patterns from my engagements" (monthly or as needed)
 ```
 
 ## Why OneDrive?
