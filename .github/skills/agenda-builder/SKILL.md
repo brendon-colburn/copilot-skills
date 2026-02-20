@@ -168,11 +168,11 @@ After user confirms, save JSON and render.
 **CRITICAL**: DO NOT create custom render scripts or separate .py files. Use ONLY the inline Python one-liner approach shown below.
 
 **Workflow for rendering**:
-1. Install dependencies: `pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0`
-   - Pip automatically skips packages that are already installed
-   - The `--quiet` flag minimizes output
-2. Save the JSON data to agenda_data.json in the engagement folder (JSON already created above)
-3. Execute the rendering using a Python one-liner (DO NOT create a separate .py file)
+1. Save the JSON data to agenda_data.json in the engagement folder (JSON already created above)
+2. Execute the rendering using a Python one-liner (DO NOT create a separate .py file)
+
+**DO NOT** run `pip install` separately. **DO NOT** use `install_python_packages` or any package management tool.
+`core.py` auto-installs its own dependencies on import. There is no separate installation step.
 
 **Required one-liner template**:
 ```bash
@@ -275,21 +275,20 @@ Verify:
 
 ## Dependencies
 
-**Automatic Installation**: Dependencies are automatically installed when rendering agendas.
+**Self-Installing**: `core.py` automatically detects and installs missing packages on import.
 
-The skill uses these Python packages (versions from `requirements.txt`):
+Required packages (auto-installed by `core.py`):
 - docxtpl>=0.16.0 (DOCX templating)
 - python-docx>=1.1.0 (DOCX manipulation)
 - Pillow>=10.0.0 (Image processing)
 
-**No manual setup required** - the skill automatically runs:
-```bash
-pip install --quiet docxtpl>=0.16.0 python-docx>=1.1.0 Pillow>=10.0.0
-```
+**IMPORTANT - DO NOT**:
+- Run `pip install` as a separate terminal command
+- Use `install_python_packages` or any package management tool
+- Create a virtual environment for this skill
+- Add any dependency installation step to the workflow
 
-**Note**: These versions use minimum version requirements (>=) as defined in requirements.txt. This allows compatible updates while maintaining a minimum baseline. Pip automatically skips packages that are already installed and meet the version requirements, making repeated runs efficient.
-
-This ensures the skill "just works" like it does in Claude Desktop, without requiring virtual environment setup.
+`core.py` handles everything. Just run the one-liner and it works.
 
 ## Reference Files
 

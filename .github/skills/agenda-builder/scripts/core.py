@@ -1,3 +1,27 @@
+import importlib
+import subprocess
+import sys
+
+def _ensure_dependencies():
+    """Auto-install required packages if missing. Eliminates the need for separate pip install steps."""
+    deps = [
+        ("docxtpl", "docxtpl", "docxtpl>=0.16.0"),
+        ("docx", "python-docx", "python-docx>=1.1.0"),
+        ("PIL", "Pillow", "Pillow>=10.0.0"),
+    ]
+    missing = []
+    for import_name, pkg_name, pip_spec in deps:
+        try:
+            importlib.import_module(import_name)
+        except ImportError:
+            missing.append(pip_spec)
+    if missing:
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "--quiet"] + missing
+        )
+
+_ensure_dependencies()
+
 from docxtpl import DocxTemplate, InlineImage
 import json
 import os
